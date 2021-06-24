@@ -19,7 +19,7 @@ namespace TestApp.Validation
 
         public bool HasValidEmail(string email)
         {
-            return email.Contains("@") && !email.Contains(".");
+            return email.Contains("@") && email.Contains(".");
         }
 
         public bool IsUserAtLeast21YearsOld(DateTime dateOfBirth)

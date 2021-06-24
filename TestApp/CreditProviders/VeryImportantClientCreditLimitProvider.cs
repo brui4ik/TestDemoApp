@@ -2,7 +2,7 @@
 
 namespace TestApp.CreditProviders
 {
-    public class VeyImportantClientCreditLimitProvider: ICreditLimitProvider
+    public class VeryImportantClientCreditLimitProvider: ICreditLimitProvider
     {
         public (bool HasCreditLimit, int CreditLimit) GetCreditLimits(User user)
         {

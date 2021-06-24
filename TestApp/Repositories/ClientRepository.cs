@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using Dapper;
 using TestApp.Models;
 
 namespace TestApp.Repositories
@@ -9,33 +10,14 @@ namespace TestApp.Repositories
     {
         public Client GetById(int id)
         {
-            Client client = null;
             var connectionString = ConfigurationManager.ConnectionStrings["appDatabase"].ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var command = new SqlCommand
-                {
-                    Connection = connection,
-                    CommandType = CommandType.StoredProcedure,
-                    CommandText = "uspGetClientById"
-                };
+            using var db = new SqlConnection(connectionString);
 
-                var parametr = new SqlParameter("@clientId", SqlDbType.Int) { Value = id };
-                command.Parameters.Add(parametr);
-                
-                connection.Open();
-                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-                while (reader.Read())
-                {
-                    client = new Client
-                    {
-                        Id = int.Parse(reader["ClientId"].ToString()),
-                        Name = reader["Name"].ToString(),
-                        ClientStatus = (ClientStatus) int.Parse(reader["ClientStatus"].ToString())
-                    };
-                }
-            }
+            var client = db.QuerySingleOrDefault<Client>(
+                "uspGetClientById",
+                new {ClientId = id},
+                commandType: CommandType.StoredProcedure);
 
             return client;
         }

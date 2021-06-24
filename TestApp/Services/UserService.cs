@@ -5,9 +5,9 @@ using TestApp.Models;
 using TestApp.Repositories;
 using TestApp.Validation;
 
-namespace TestApp
+namespace TestApp.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IClientRepository _clientRepository;
         private readonly CreditLimitProviderFactory _creditLimitProviderFactory;
@@ -49,7 +49,7 @@ namespace TestApp
             user.HasCreditLimit = hasCreditLimit;
             user.CreditLimit = creditLimit;
 
-            if (!_userValidator.HasCreditLimitAndLimitLessThan500(user))
+            if (_userValidator.HasCreditLimitAndLimitLessThan500(user))
             {
                 return false;
             }
